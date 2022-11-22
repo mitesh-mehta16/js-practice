@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parsing JSON</title>
+</head>
+<body>
+    <div id="container"></div>
+    
+</body>
+</html>
+
+<script>
+
+    //a container in the body
+    const displayContainer = document.getElementById("container");
+
+    //fragment creation and initialization
+    const fragmentElem = document.createDocumentFragment();
+
+    //styling to container
+    displayContainer.style.display = "flex";
+    displayContainer.style.flexWrap = "wrap";
+
+
+// get data from API (rest-endpoint) and store it in jsonStored
+function fetchData() {
+    //https://jsonplaceholder.typicode.com/users
+    var request = new XMLHttpRequest();
+    let jsonStored = [];
+    request.open('GET', 'https://jsonplaceholder.typicode.com/users');
+    request.send();
+    request.onload = ()=>{
+        //console.log(JSON.parse(request.response));
+        jsonStored = JSON.parse(request.response);
+        //console.log(jsonStored[0]);
+
+        //calling displayCard method
+        displayCard(jsonStored);
+    }
+    
+}
+
+//Template String Concatentation
+//`<p>${name}</p><p>{userName}</p><p>${email}</p>`
+
+function displayCard(jsonStored){
+    
+    for (let i = 0; i < jsonStored.length ; i++) {
+        const card = document.createElement("aside");
+        const userName = document.createElement("p");
+        const name = document.createElement("p");
+        const email = document.createElement("p");
+        const city = document.createElement("p");
+
+        userName.append("UserName: "+ jsonStored[i].username);
+        name.append("Name: "+ jsonStored[i].name);
+        email.append("Email: "+ jsonStored[i].email);
+        city.append("City: "+ jsonStored[i].address.city);
+
+        card.append(userName);
+        card.append(name);
+        card.append(email);
+        card.append(city);
+
+        card.style.margin = "10px";
+        card.style.border = "thick solid #0000FF";
+
+
+        fragmentElem.append(card);
+    }
+
+    displayContainer.append(fragmentElem);
+    
+}
+
+
+
+
+
+fetchData();
+
+</script>

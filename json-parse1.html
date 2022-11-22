@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parse JSON Products</title>
+</head>
+<body>
+    <div id="container"></div>
+</body>
+</html>
+
+<script>
+
+    //https://github.com/Vidhya-Classes/c8-frontend-snippet/blob/main/JavaScript/Day-6%20DOM%20API%20V6/product-listing.html
+
+    //a container in the body
+    const displayContainer = document.getElementById("container");
+
+    //fragment creation and initialization
+    const fragmentElem = document.createDocumentFragment();
+
+    displayContainer.style.display = "flex";
+    displayContainer.style.flexWrap = "wrap";
+    
+
+    function fetchData () {
+        var request = new XMLHttpRequest();
+    let productJSON = [];
+    request.open('GET', 'https://fakestoreapi.com/products');
+    request.send();
+    request.onload = ()=>{
+        //console.log(JSON.parse(request.response));
+        productJSON = JSON.parse(request.response);
+        console.log(productJSON);
+
+        //calling displayCard method
+        displayCard(productJSON);
+    }
+    }
+
+    function displayCard (productJSON) {
+        for (let i = 0; i < productJSON.length ; i++) {
+        const card = document.createElement("aside");
+        const title = document.createElement("p");
+        const image = document.createElement("img");
+        const price = document.createElement("p");
+
+        // console.log(productJSON[i].title);
+        // console.log(productJSON[i].image);
+        // console.log(productJSON[i].category);
+
+        title.append("Title: " + productJSON[i].title);
+        image.setAttribute("src", productJSON[i].image);
+        image.style.width = "100px";
+        image.style.height = "100px";
+
+       
+
+        price.append("Price: "+productJSON[i].price);
+
+        card.style.margin = "10px";
+        card.style.border = "thick solid #0000FF";
+
+        card.append(title);
+        card.append(image);
+        card.append(price);
+        card.style.display = "flex";
+        card.style.flexDirection = "column";
+        card.style.alignItems = "center";
+
+        fragmentElem.append(card);
+    }
+
+    displayContainer.append(fragmentElem);
+    }
+
+    fetchData();
+
+</script>
+
+<!--title, image, name,category-->
